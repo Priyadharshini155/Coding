@@ -1,0 +1,61 @@
+<html>
+	<head>
+		<script>
+		function calculate()
+		{
+			var p = Number(document.getElementById("pin").value);
+			var l = p.toString().length;
+			if ( l !== 6) 
+		   {
+		   	 alert(" Please enter valid postal  number!");
+            return false;
+        	} 
+       		  var xhttp = new XMLHttpRequest();
+			  xhttp.onreadystatechange = function() {
+			    if (this.readyState == 4 && this.status == 200) {
+			      //document.getElementById("demo").innerHTML =
+			      //this.responseText;
+			      console.log(this.responseText);
+			      var i , txt = "" ;
+			      var  myObj = JSON.parse(this.responseText);
+			      txt += "<table border='1'>";
+			      //console.log(myObj.length);
+			      //console.log(myObj[0].PostOffice.length);
+			      if (myObj[0].Status == "Success")
+					 {
+					 	txt += "<tr><th>Name</th><th>Branch</th><th>District</th><th>State</th><th>country</th><th>Pincode</th></tr>"
+					      for (i = 0; i < myObj[0].PostOffice.length; i++)
+					      {
+					   //   	var pro = myObj[0];
+					   //   	 for(var j = 0; j < pro.length; j++)
+							 //{
+							 
+					      	txt += "<tr><td>" + myObj[0].PostOffice[i].Name + "</td>";
+					      	txt += "<td>" + myObj[0].PostOffice[i].BranchType + "</td>";
+					      	txt += "<td>" + myObj[0].PostOffice[i].District + "</td>";
+					      	txt += "<td>" + myObj[0].PostOffice[i].State + "</td>";
+					      	txt += "<td>" + myObj[0].PostOffice[i].Country + "</td>";
+					      	txt += "<td>" + myObj[0].PostOffice[i].Pincode + "</td></tr>";
+					      }
+					 }
+			      
+				      else
+				      {
+				      	txt += "<tr><td>" + myObj[0].Message + "</td></tr>";
+				      }
+			  
+			       txt += "</table>" ;   
+    			   document.getElementById("demo").innerHTML = txt;
+    			  }
+			  };
+			  xhttp.open("GET", "https://api.postalpincode.in/pincode/"+p, true);
+			  xhttp.send();
+		}
+		</script>
+	</head>
+		<body>
+			Pincode:<input id="pin" value="641025" />
+			<p id="demo"></p>
+			<button onclick="calculate()">Submit</button>
+		</body>
+</html>
